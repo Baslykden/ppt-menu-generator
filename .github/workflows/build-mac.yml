@@ -24,10 +24,10 @@ jobs:
 
       - name: Build macOS app
         run: |
-          pyinstaller --windowed --name MenuGenerator pp.py
+          pyinstaller --windowed --name EV_PresentationMac --icon icon_mac.icns pp.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MenuGenerator-mac
-          path: dist/**
+          name: EV_PresentationMac-mac
+          path: dist/EV_PresentationMac.app
