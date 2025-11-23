@@ -675,7 +675,24 @@ def main():
         if 3 <= idx <= 8:
             process_sheet(wb, ws, idx, prs, bg_image_path, skip_columns)
 
-    out_path = excel_path.with_name(excel_path.stem + "_auto.pptx")
+    # ---- формируем имя файла: "КП {B3 первого листа}.pptx" ----
+    ws1 = wb.worksheets[0]        # первый лист
+    b3_val = ws1["B3"].value
+    suffix = str(b3_val).strip() if b3_val is not None else ""
+
+    if not suffix:
+        # если B3 пустая — подстрахуемся исходным именем файла
+        suffix = excel_path.stem
+
+    raw_name = f"КП {suffix}"
+
+    # чистим недопустимые символы для имени файла
+    invalid_chars = '<>:"/\\|?*'
+    safe_name = "".join("_" if ch in invalid_chars else ch for ch in raw_name)
+
+    out_path = excel_path.with_name(safe_name + ".pptx")
+    # ---------------------------------------------
+
     prs.save(out_path)
 
     messagebox.showinfo(
@@ -686,3 +703,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
